@@ -41,6 +41,16 @@ public interface PrefixRepository extends GraphRepository<Prefix> {
 		+ "RETURN count(w)")
 	public int countWordsWithPrefix(String prefix);
 	
+	@Query("MATCH (p:Prefix)-[*]->(w:Prefix) "
+		+ "WHERE p.prefix =~ {0} AND w.terminal = TRUE "
+		+ "RETURN w.prefix")
+	public List<String> getWordsMatching(String text);
+	
+	@Query("MATCH (p:Prefix)-[*]->(w:Prefix) "
+		+ "WHERE p.prefix =~ {0} AND w.terminal = TRUE "
+		+ "RETURN count(w)")
+	public int countWordsMatching(String prefix);
+	
 	@Query("MATCH (w:Prefix) "
 		+ "WHERE w.terminal = TRUE "
 		+ "RETURN count(w)")

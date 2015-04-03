@@ -26,13 +26,14 @@ import javax.ws.rs.ApplicationPath;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 
+import es.uvigo.ei.sing.resttrie.service.InfixService;
 import es.uvigo.ei.sing.resttrie.service.PrefixService;
 import es.uvigo.ei.sing.resttrie.service.WordService;
 
 @ApplicationPath("api")
 public class PanDrugsDBPublicApplication extends ResourceConfig {
 	public PanDrugsDBPublicApplication() {
-		super(WordService.class, PrefixService.class);
+		super(WordService.class, PrefixService.class, InfixService.class);
 		
 		register(RequestContextFilter.class);
 	}
