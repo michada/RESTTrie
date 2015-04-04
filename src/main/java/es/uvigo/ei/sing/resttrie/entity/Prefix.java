@@ -21,11 +21,14 @@
  */
 package es.uvigo.ei.sing.resttrie.entity;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.GraphId;
@@ -73,15 +76,25 @@ public class Prefix implements Comparable<Prefix>, Serializable {
 		return terminal;
 	}
 	
-	public SortedSet<FollowedBy> getChildren() {
-		return new TreeSet<>(this.children);
+	public SortedSet<Prefix> getChildren() {
+		return new TreeSet<>(
+			this.children.stream()
+				.map(FollowedBy::getTo)
+			.collect(Collectors.toSet())
+		);
 	}
 	
-	public FollowedBy addFollowigPrefix(Prefix follower, char letter) {
-		if (!(this.getPrefix() + letter).equals(follower.getPrefix())) {
+	public FollowedBy addFollowigPrefix(Prefix follower) {
+		requireNonNull(follower);
+		
+		final String followerPrefix = follower.getPrefix()
+			.substring(0, follower.getPrefix().length() - 1);
+		
+		if (!(this.getPrefix()).equals(followerPrefix)) {
 			throw new IllegalArgumentException("Invalid follower");
 		}
-		final FollowedBy relation = new FollowedBy(this, follower, letter);
+		
+		final FollowedBy relation = new FollowedBy(this, follower);
 		this.children.add(relation);
 		
 		return relation;

@@ -30,7 +30,7 @@ import org.springframework.data.neo4j.annotation.RelationshipEntity;
 import org.springframework.data.neo4j.annotation.StartNode;
 
 @RelationshipEntity(type = "FOLLOWED_BY")
-public class FollowedBy implements Comparable<FollowedBy>, Serializable {
+public class FollowedBy implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@GraphId private Long nodeId;
@@ -41,14 +41,11 @@ public class FollowedBy implements Comparable<FollowedBy>, Serializable {
 	@EndNode @Fetch
 	private Prefix to;
 	
-	private char letter;
-	
 	FollowedBy() {}
 
-	public FollowedBy(Prefix from, Prefix to, char letter) {
+	public FollowedBy(Prefix from, Prefix to) {
 		this.from = from;
 		this.to = to;
-		this.letter = letter;
 	}
 
 	public Prefix getFrom() {
@@ -65,30 +62,5 @@ public class FollowedBy implements Comparable<FollowedBy>, Serializable {
 
 	public void setTo(Prefix to) {
 		this.to = to;
-	}
-
-	public char getLetter() {
-		return letter;
-	}
-
-	public void setLetter(char letter) {
-		this.letter = letter;
-	}
-
-	@Override
-	public int compareTo(FollowedBy o) {
-		final int letterCmp = Character.compare(this.getLetter(), o.getLetter());
-		
-		if (letterCmp == 0) {
-			final int fromCmp = this.getFrom().compareTo(o.getFrom());
-			
-			if (fromCmp == 0) {
-				return this.getTo().compareTo(o.getTo());
-			} else {
-				return fromCmp;
-			}
-		} else {
-			return letterCmp;
-		}
 	}
 }

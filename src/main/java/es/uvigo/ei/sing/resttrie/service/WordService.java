@@ -60,8 +60,7 @@ public class WordService {
 
 		String prefix = "";
 		for (int i = 0; i < word.length(); i++) {
-			final char letter = word.charAt(i);
-			prefix += letter;
+			prefix += word.charAt(i);
 			
 			final Prefix newPrefix = Optional.ofNullable(repository.getPrefixByPrefix(prefix))
 				.orElse(new Prefix(prefix));
@@ -73,7 +72,7 @@ public class WordService {
 			repository.save(newPrefix);
 			
 			if (current != null) {
-				current.addFollowigPrefix(newPrefix, letter);
+				current.addFollowigPrefix(newPrefix);
 			}
 			
 			current = newPrefix;
